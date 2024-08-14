@@ -67,6 +67,7 @@
 
 1. 각 OS에 맞게 설치
 2. 성공적으로 설치된 경우 `git --version` 으로 확인 가능
+   
     ![01](https://github.com/user-attachments/assets/64738ba3-0e88-43dc-9ee3-3442a9d69eec)
 
 ## Chapter5. 깃과 친해지기
@@ -88,12 +89,12 @@
 - `ls` ; list segmentation
     - 디렉터리 안의 파일 목록을 보여주는 명령어
     - 디렉터리 안에 아무 파일도 존재하지 않는 경우: 출력 결과 없음
-    - 
-        ![02](https://github.com/user-attachments/assets/354b9999-c8f5-4f42-9054-a54f44e72fef)
+
+      ![02](https://github.com/user-attachments/assets/354b9999-c8f5-4f42-9054-a54f44e72fef)
 
     - 디렉터리 안에 파일이 존재하는 경우: 파일에 대한 리스트 출력
-    - 
-        ![03](https://github.com/user-attachments/assets/2c05c117-b278-4f5d-9bd0-f3d96d452cd9)
+    
+      ![03](https://github.com/user-attachments/assets/2c05c117-b278-4f5d-9bd0-f3d96d452cd9)
 
     - `ls -a` : 더 자세하게 출력
         > 🔎 **더 알아보기**
@@ -154,23 +155,27 @@
         > - `cmd`에서는 `dir` 명령어 사용
         > - `Powershell`에서는 `Get-Item .` 명령어 사용
         >   - 단, Powershell에서는 유닉스 및 리눅스 사용자들을 위하여 ls에 대한 별칭을 제공하여 사용 가능
-            
+        
 - `mkdir` ; make directory
     - 새로운 디렉터리를 만드는 명령어
     - `mkdir 새로운 디렉터리명`과 같이 사용
+      
         ![10](https://github.com/user-attachments/assets/ac38ce35-36c7-4262-9985-79951cd3f8b0)
+        
         ![11](https://github.com/user-attachments/assets/9eb39959-8422-4848-b4dc-8fb48ea8d199)
 
 - `cd` ; change directory
     - 디렉터리를 이동하는 명령어
     - `cd 디렉터리명` 과 같이 사용
     - `cd ..` 를 입력하면 상위 디렉터리로 이동 가능
+      
         ![12](https://github.com/user-attachments/assets/026002f3-d648-40b5-807e-d1ca41597946)
 
 ### Section2-2. 자주 쓰이는 명령어는? init, status
 
 - `init` ; initialize
     - `git init`과 같이 사용
+      
         ![13](https://github.com/user-attachments/assets/c83acef5-6680-417f-99e3-bc2d0b3cd401)
       
         실행하고 나면 `.git` 이라는 보이지 않는 디렉터리가 생성됨
@@ -179,6 +184,7 @@
     - `git status` 와 같이 사용
     - init 하기 전에 실행하면 오류 출력
     - `Untracked files`
+      
         ![14](https://github.com/user-attachments/assets/c44c9549-99ad-43a3-9dd0-fe3e74329cc6)
        
         > ⁉️ **Why?**
@@ -199,8 +205,7 @@
 
         add 후 status를 실행하면 해당 파일이 잘 트래킹되고 있는 것을 확인 할 수 있음
         
-        > 🏷️ `git add .` 으로 모든 파일을 추가할 수 있다.
-        
+    > 🏷️ `git add .` 으로 모든 파일을 추가할 수 있다.
     
     > 📢 Mac에서는 .DS_Store 라는 파일이 생기는데, 삭제해도 무방하다.
     
