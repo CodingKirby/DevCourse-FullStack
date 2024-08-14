@@ -2,7 +2,7 @@
 >
 > 1. Git 설치
 > 2. Git에서 자주 사용하는 명령어: ls, cd, mkdir, init, status, add, commit, log
-> 3. 깃허브
+> 3. 깃허브 소개
 
 <details>
   <summary><strong>What Emoji means</strong></summary>
@@ -19,6 +19,7 @@
     <li>🙋‍♀️ 질문 있어요</li>
     <li>‼ 오류 발생</li>
     <li>❗ 문제 해결</li>
+    <li>❓</li>
     <li>⁉ Why? 이유 설명</li>
     <li>❌⭕ Yes, No</li>
     <li>💡 깨달은 점, 생각해볼 점</li>
@@ -34,12 +35,16 @@
   </ul>
 </details>
 
+---
+
 ## *What I did?*
 
 > **1주차 Part3**
 > 
 - [x]  강의 수강
 - [x]  오늘의 과제 제출
+
+---
 
 ## *What I Learned?*
 
