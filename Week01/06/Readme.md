@@ -324,13 +324,12 @@ A---B---C---D---M  (main)
         
     - 로컬 저장소 동기화
         - `git branch`로 확인해보면, 아직 로컬 저장소 브랜치는 동기화되지 않았다
-          
-            <img width="534" alt="13" src="https://github.com/user-attachments/assets/1665f686-d4e1-46e1-96b3-0081007b6c57">
 
+            <img width="527" alt="14" src="https://github.com/user-attachments/assets/c8432c7d-f770-4e94-80cb-d98a17b4dbae">
             
         - ➡️ `git checkout -t <remote-branch>`로 로컬에 새로운 브랜치를 생성한다.
           
-            <img width="527" alt="14" src="https://github.com/user-attachments/assets/c8432c7d-f770-4e94-80cb-d98a17b4dbae">
+            <img width="534" alt="13" src="https://github.com/user-attachments/assets/1665f686-d4e1-46e1-96b3-0081007b6c57">
             
             <blockquote>
             🔎 `git checkout -t <remote-branch>`는 특정 브랜치를 체크아웃하면서 동시에 해당 브랜치를 로컬에 새로 생성할 때 사용한다. 이 명령어는 `-t` 옵션을 통해 추적(tracking) 브랜치를 자동으로 설정한다.
