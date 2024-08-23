@@ -2,10 +2,10 @@ let http = require('http'); // http 프로토콜을 사용하기 위한 모듈 *
 let url = require('url'); // url을 파싱하기 위한 모듈
 const { route } = require('./router');
 
-function start(route) {
+function start(route, handle) { // start 함수 정의: route와 handle을 인자로 받음
     function onRequest(request, response) { // onRequest 함수 정의
         let pathname = url.parse(request.url).pathname; // url 모듈의 parse 함수를 호출하여 request.url을 파싱
-        route(pathname); // route 함수 호출
+        route(pathname, handle); // route 함수 호출
 
         response.writeHead(200, {"Content-Type": "text/html"}); // 응답 헤더 작성: 200은 성공을 의미, Content-Type은 text/html로 설정
         response.write("Hello Node.js"); // 응답 본문 작성: body에 Hello Node.js를 출력
