@@ -4,7 +4,9 @@ let url = require('url'); // url 모듈을 사용하기 위한 모듈 *require: 
 function start(route, handle) { // start 함수 정의: route와 handle을 인자로 받음
     function onRequest(request, response) { // onRequest 함수 정의
         let pathname = url.parse(request.url).pathname; // url 모듈의 parse 함수를 호출하여 request.url을 파싱
-        route(pathname, handle, response); // route 함수 호출
+        let queryData = url.parse(request.url, true).query; // url 모듈의 parse 함수를 호출하여 request.url을 파싱
+
+        route(pathname, handle, response, queryData.productId); // route 함수 호출
     }
     
     // http 모듈의 createServer 함수를 호출하여 서버를 생성

@@ -1,7 +1,7 @@
-function route(pathname, handle, response) { // route 함수 정의: pathname과 handle을 인자로 받음
+function route(pathname, handle, response, productId) { // route 함수 정의: pathname과 handle을 인자로 받음
     if (typeof handle[pathname] === 'function') { // handle 객체에 pathname 키가 존재하고, 그 값이 함수일 경우
         console.log("pathname: " + pathname); // request.url 출력, console.log란 터미널에 출력하는 함수
-        handle[pathname](response); // handle 객체의 pathname 키에 해당하는 함수 호출
+        handle[pathname](response, productId); // handle 객체의 pathname 키에 해당하는 함수 호출
     } else { // handle 객체에 pathname 키가 존재하지 않을 경우
         console.log("No request handler found for " + pathname); // request.url 출력
         response.writeHead(404, {"Content-Type": "text/html"}); // 응답 헤더 작성: 404는 Not Found를 의미, Content-Type은 text/html로 설정
