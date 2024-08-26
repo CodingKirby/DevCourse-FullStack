@@ -1,10 +1,11 @@
 const fs = require('fs'); // fs 모듈을 불러옴: 파일 시스템을 다루는 모듈, file syncronous의 약자
 const main_view = fs.readFileSync('./main.html', 'utf8'); // main.html 파일을 읽어 main_view 변수에 저장
+const orderlist_view = fs.readFileSync('./orderlist.html', 'utf8'); // orderlist.html 파일을 읽어 orderlist_view 변수에 저장
 
 const mariadb = require('./database/connect/mariadb'); // mariadb 모듈을 불러옴
 
 function main(response) { // main 함수 정의: '/' 경로로 요청이 들어왔을 때 실행될 함수
-  console.log('Request handler "main" was called.');
+  // console.log('Request handler "main" was called.');
 
   // mariadb 모듈의 query 함수 호출: product 테이블의 모든 데이터를 가져옴
   mariadb.query('SELECT * FROM product', function (err, rows) { // 쿼리문과 콜백 함수를 인자로 받음
@@ -17,18 +18,46 @@ function main(response) { // main 함수 정의: '/' 경로로 요청이 들어�
 }
 
 function order(response, productId) { // order 함수 정의: '/order' 경로로 요청이 들어왔을 때 실행될 함수
-  response.writeHead(200, {"Content-Type": "text/html"}); // 응답 헤더 작성: 200은 성공을 의미, Content-Type은 text/html로 설정
-  
+  // console.log('Request handler "order" was called.');
+
   mariadb.query("INSERT INTO orderlist VALUES (" + productId + ", '" + new Date().toLocaleDateString() + "');", function(err, rows) {
     console.log(rows);
   })
-  
-  response.write('Order page'); // 응답 본문 작성: body에 Order page를 출력
+
+  response.writeHead(200, {"Content-Type": "text/html"}); // 응답 헤더 작성: 200은 성공을 의미, Content-Type은 text/html로 설정
+  response.write('Thank you for your order! <br> you can check the result on the order list page.'); // 응답 본문 작성: body에 메시지 출력
   response.end(); // 응답 종료: 클라이언트에게 응답을 전송하고 응답을 종료
+}
+
+function orderlist(response) { // orderlist 함수 정의: '/orderlist' 경로로 요청이 들어왔을 때 실행될 함수
+  // console.log('Request handler "orderlist" was called.');
+  
+  response.writeHead(200, {"Content-Type": "text/html"}); // 응답 헤더 작성: 200은 성공을 의미, Content-Type은 text/html로 설정
+
+  mariadb.query('SELECT * FROM orderlist', function (err, rows) {
+    response.write(orderlist_view);
+    
+    rows.forEach(element => {
+      response.write('<tr>'
+      + '<td>' + element.product_id + '</td>'
+      + '<td>' + element.order_date + '</td>'
+      + '</tr>');
+    });
+
+    response.write('</table>');
+    response.end(); // 응답 종료: 클라이언트에게 응답을 전송하고 응답을 종료
+  })
 }
 
 function mainCss(response) {
   fs.readFile('./main.css', function (err, data) {
+    response.writeHead(200, {'Content-Type': 'text/css'});
+    response.end(data);
+  });
+}
+
+function orderlistCss(response) {
+  fs.readFile('./orderlist.css', function (err, data) {
     response.writeHead(200, {'Content-Type': 'text/css'});
     response.end(data);
   });
@@ -58,9 +87,11 @@ function blackRacket(response) {
 let handle = {}; // key:value 형태의 객체 생성
 handle['/'] = main; // '/' 키에 main 함수 저장
 handle['/order'] = order;
+handle['/orderlist'] = orderlist;
 
 /* css directory */
 handle['/main.css'] = mainCss;
+handle['/orderlist.css'] = orderlistCss;
 
 /* image directory */
 handle['/img/redRacket.png'] = redRacket;
