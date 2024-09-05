@@ -12,6 +12,7 @@ app.get('/products/:n', function (req, res) {
     // req.params.n -> URL로 넘어온 값을 가져옴
     // products/ 뒤에 오는 값을 n이라는 변수에 저장
     
+    
     res.json({
         num: req.params.n
     })
