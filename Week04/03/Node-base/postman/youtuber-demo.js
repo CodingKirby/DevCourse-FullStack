@@ -64,6 +64,6 @@ app.post('/youtuber', function (req, res) {
 
 // 유투버 전체 조회
 app.get('/youtubers', function (req, res) {
-    // let youtubers = Array.from(db.values())
+    console.log(db)
     res.json(db)
 })
