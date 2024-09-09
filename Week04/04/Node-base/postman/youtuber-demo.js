@@ -68,8 +68,8 @@ app.get('/youtubers', function (req, res) {
     // console.log(db.set()) // Map 객체의 키와 값들을 추출: Map(4) {size: 4, 1 => {channelTitle, …}, 2 => {channelTitle, …}, 3 => {…}, undefined => undefined}
     
     let youtubers = {}
-    db.forEach(function (youtuber) { // foEach로 Map 객체의 값들만 추출
-        youtubers[youtuber.channelTitle] = youtuber
+    db.forEach(function (youtuber, id) { // foEach로 Map 객체의 값들만 추출
+        youtubers[id] = youtuber
     })
 
     // Map을 일반 객체로 변환
@@ -79,4 +79,23 @@ app.get('/youtubers', function (req, res) {
     // let youtubers = Array.from(db)
 
     res.json(youtubers)
+})
+
+// 유투버 삭제
+app.delete('/youtubers/:id', function (req, res) {
+    let {id} = req.params
+    id = parseInt(id)
+    let youtuber = db.get(id)
+
+    if (youtuber === undefined) {
+        res.json({
+            message: `${id}번 유투버 정보를 찾을 수 없습니다.`
+        })
+        return
+    }
+
+    db.delete(id)
+    res.json({
+        message: `${youtuber.channelTitle}님, 아쉽지만 다음에 또 뵙겠습니다.`
+    })
 })
