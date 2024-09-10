@@ -78,6 +78,7 @@ app.get('/youtubers', function (req, res) {
     // Map을 배열로 변환
     // let youtubers = Array.from(db)
 
+    // 응답
     res.json(youtubers)
 })
 
@@ -94,8 +95,57 @@ app.delete('/youtubers/:id', function (req, res) {
         return
     }
 
+    // db에서 삭제
     db.delete(id)
+
+    // 응답
     res.json({
         message: `${youtuber.channelTitle}님, 아쉽지만 다음에 또 뵙겠습니다.`
+    })
+})
+
+let msg = ""
+
+// 전체 유투버 삭제
+app.delete('/youtubers', function (req, res) {
+    // db에 값이 없으면, "삭제할 유투버 정보가 없습니다." 출력
+    if (db.size === 0) {
+        msg = "삭제할 유투버 정보가 없습니다."
+    }
+    else { // db에 값이 1개 이상이면, 전체 삭제
+        // db 초기화
+        db.clear()
+        msg = "모든 유투버 정보가 삭제되었습니다."
+    }
+    
+    // 응답
+    res.json({
+        message: msg
+    })
+})
+
+// 유투버 정보 수정
+app.put('/youtubers/:id', function (req, res) {
+    let {id} = req.params
+    id = parseInt(id)
+    let youtuber = db.get(id)
+
+    if (youtuber === undefined) {
+        res.json({
+            message: `${id}번 유투버 정보를 찾을 수 없습니다.`
+        })
+        return
+    }
+
+    let oldTitle = youtuber.channelTitle
+    let newTitle = req.body.channelTitle
+    youtuber.channelTitle = newTitle
+    
+    // db 수정
+    db.set(id, youtuber)
+
+    // 응답
+    res.json({
+        message: `${oldTitle}님, 채널명이 ${newTitle}로 수정되었습니다.`
     })
 })
