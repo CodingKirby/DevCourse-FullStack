@@ -10,36 +10,6 @@
 
 </blockquote>
 
-<details>
-  <summary>What Emoji means</summary>
-  <ul>
-    <li>⭐ 중요</li>
-    <li>📌 Pin Point, Tips</li>
-    <li>🔑 Key Point</li>
-    <li>✅ Check Point</li>
-    <li>💬 강사의 말(인용)</li>
-    <li>🚨 주의</li>
-    <li>🚫 금지</li>
-    <li>⛔ 여기서 잠깐!!</li>
-    <li>🔖 잠깐 알아보기, 참고</li>
-    <li>🙋‍♀️ 질문 있어요</li>
-    <li>‼ 오류 발생</li>
-    <li>❗ 문제 해결, Notice</li>
-    <li>❓ 궁금한 점</li>
-    <li>⁉ Why? 이유 설명</li>
-    <li>❌⭕ Yes, No</li>
-    <li>💡 깨달은 점, 생각해볼 점, 알아둘 것</li>
-    <li>🔎 더 알아보기</li>
-    <li>📖 개념 정리</li>
-    <li>🚩 학습 목표, 방향, 배울 내용</li>
-    <li>➡ 결론</li>
-    <li>✏ 요점 정리</li>
-    <li>🗂 내용 요약</li>
-    <li>📢 공지</li>
-    <li>⚙ 환경설정</li>
-    <li>🔗 링크</li>
-  </ul>
-</details>
 
 ## *What I did?*
 
