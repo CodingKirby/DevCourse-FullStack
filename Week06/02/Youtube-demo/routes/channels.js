@@ -106,12 +106,7 @@ function getChannels(req, res) {
 
 /* ---------------------------- /channels/:id ---------------------------- */
 // 개별 채널 조회
-function getChannel(req, res) {    
-    const err = validationResult(req)
-    if (!err.isEmpty()) {
-        return res.status(400).json(err.array())
-    }
-
+function getChannel(req, res) {
     const id = parseInt(req.params.id)
     let sql = `SELECT * FROM channels WHERE id = ?`
 
@@ -132,11 +127,6 @@ function getChannel(req, res) {
 
 // 개별 채널 삭제
 function deleteChannel(req, res) {
-    const err = validationResult(req)
-    if (!err.isEmpty()) {
-        return res.status(400).json(err.array())
-    }
-
     const id = parseInt(req.params.id)
     let sql = `DELETE FROM channels WHERE id = ?`
     const values = [id]
@@ -159,11 +149,6 @@ function deleteChannel(req, res) {
 
 // 개별 채널 수정
 function updateChannel(req, res) {
-    const err = validationResult(req)
-    if (!err.isEmpty()) {
-        return res.status(400).json(err.array())
-    }
-    
     const id = parseInt(req.params.id)
     const title = req.body.title
     let sql = `UPDATE channels SET title = ? WHERE id = ?`
