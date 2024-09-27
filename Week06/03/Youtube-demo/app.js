@@ -1,8 +1,10 @@
 // 기본 Express 설정
+require('dotenv').config();
 const express = require('express');
 const app = express();
-app.listen(3000);
-app.use(express.json())
+
+app.listen(process.env.PORT);
+app.use(express.json());
 
 // 라우터 모듈 가져오기
 const userRouter = require('./routes/users'); // user-demo.js 불러오기
