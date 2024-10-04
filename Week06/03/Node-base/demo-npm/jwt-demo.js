@@ -1,6 +1,6 @@
 var jwt = require('jsonwebtoken'); // jwt 모듈 가져오기
 var dotenv = require('dotenv'); // dotenv 모듈 가져오기
-dotenv.config(); // dotenv 설정
+dotenv.config({ path: './Week06/03/Node-base/demo-npm/.env' }); // dotenv 설정
 
 var token = jwt.sign({ foo: 'bar' }, process.env.PRIVATE_KEY); // 토큰 생성 = jwt 서명을 했다!
 // (페이로드, 비밀키) + SHA256 => 토큰 생성
