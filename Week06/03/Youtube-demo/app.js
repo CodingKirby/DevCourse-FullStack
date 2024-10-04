@@ -1,5 +1,5 @@
 // 기본 Express 설정
-require('dotenv').config();
+require('dotenv').config({ path: './Week06/03/Youtube-demo/.env' });
 const express = require('express');
 const app = express();
 
