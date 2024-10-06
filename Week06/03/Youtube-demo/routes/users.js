@@ -115,7 +115,7 @@ function loginUser(req, res) {
     )
 }
 
-// 회원 개별 조회xw
+// 회원 개별 조회
 function getUser(req, res) {
     let { email } = req.body
     let sql = 'SELECT * FROM `users` WHERE `email` = ?'
