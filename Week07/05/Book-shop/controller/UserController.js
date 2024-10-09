@@ -1,6 +1,3 @@
-const dotenv = require('dotenv');
-dotenv.config({ path: './Week07/03/Book-shop/.env' });
-
 const conn = require('../mariadb');
 const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
