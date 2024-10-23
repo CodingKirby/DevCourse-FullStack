@@ -3,7 +3,14 @@ const { StatusCodes } = require('http-status-codes');
 
 // 전체 도서 목록 조회 + 카테고리 필터 + 신간 필터
 const getAllBooks = (req, res) => {
-    const { category_id, news } = req.query;
+    const { category_id, news, limit, currentPage } = req.query;
+
+    // limit: page 당 도서 수   ex. 10
+    // currentPage: 현재 페이지  ex. 1, 2, 3, ...
+    // offset: 시작 index      ex. 0, 10, 20, ...
+    //                        (currentPage - 1) * limit
+    
+    let offset = (currentPage - 1) * limit;
     let sql = `SELECT * FROM books`;
     let conditions = [];
     let values = [];
@@ -23,6 +30,10 @@ const getAllBooks = (req, res) => {
     if (conditions.length > 0) {
         sql += ` WHERE ` + conditions.join(' AND ');
     }
+
+    // LIMIT와 OFFSET 추가
+    sql += ` LIMIT ? OFFSET ?`;
+    values.push(parseInt(limit), offset);
 
     conn.query(sql, values, (err, result) => {
         if (err) {
