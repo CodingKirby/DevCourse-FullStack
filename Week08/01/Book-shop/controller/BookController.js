@@ -1,29 +1,32 @@
 const conn = require('../mariadb');
 const { StatusCodes } = require('http-status-codes');
 
+// 전체 도서 목록 조회 + 카테고리 필터 + 신간 필터
 const getAllBooks = (req, res) => {
-    const { category_id } = req.query;
+    const { category_id, news } = req.query;
+    let sql = `SELECT * FROM books`;
+    let conditions = [];
+    let values = [];
 
-    // 카테고리별 도서 리스트
+    // 카테고리 필터 추가
     if (category_id) {
-        const sql = `SELECT * FROM books WHERE category_id = ?`;
-        const values = [category_id];
-        conn.query(sql, values
-            , (err, result) => {
-            if (err) {
-                console.log(err);
-                return res.status(StatusCodes.BAD_REQUEST).end();
-            }
-            res.status(StatusCodes.OK).json(result);
-        });
-        return;
+        conditions.push(`category_id = ?`);
+        values.push(category_id);
     }
 
-    // (요약된) 전체 도서 리스트 -> 프론트엔드에서 알아서 필요한 데이터만 사용
-    const sql = `SELECT * FROM books`;
-    conn.query(sql, (err, result) => {
+    // 신간 필터 추가 (최근 한 달)
+    if (news) {
+        conditions.push(`pub_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()`);
+    }
+
+    // 조건이 있으면 WHERE 절 추가
+    if (conditions.length > 0) {
+        sql += ` WHERE ` + conditions.join(' AND ');
+    }
+
+    conn.query(sql, values, (err, result) => {
         if (err) {
-            console.log(err);
+            console.error(err);
             return res.status(StatusCodes.BAD_REQUEST).end();
         }
         res.status(StatusCodes.OK).json(result);
