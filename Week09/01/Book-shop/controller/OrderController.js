@@ -1,8 +1,16 @@
-const conn = require('../mariadb');
+const mariadb = require('mysql2/promise');
 const { StatusCodes } = require('http-status-codes');
 
 // 주문하기
-const order = (req, res) => {
+const order = async (req, res) => {
+    const conn = await mariadb.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        database: 'Bookshop',
+        dateStrings: true
+    });
+
     const { userId, items, shipping, firstBookTitle, totalQuantity, totalPrice } = req.body;
     let shipping_id;
     let order_id;
@@ -10,18 +18,9 @@ const order = (req, res) => {
     // 1. shipping 테이블에 주문 정보 저장
     let sql = 'INSERT INTO shipping (address, receiver, contact) VALUES (?, ?, ?)';
     let values = [shipping.address, shipping.receiver, shipping.contact];
-    conn.query(sql, values, (err, result) => {
-        if (err) {
-            console.log(err);
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(result).end();
-        }
+    let [ result ] = await conn.query(sql, values);
+    console.log(result);
 
-        shipping_id = result.insertId;
-        console.log('result.insertId:', result.insertId);
-        console.log('shipping_id 1:', shipping_id);
-    });
-
-    console.log('shipping_id 2:', shipping_id);
     // 2. orders 테이블에 주문 정보 저장
     sql = 'INSERT INTO orders (user_id, shipping_id, main_book, total_quantity, total_price) VALUES (?, ?, ?, ?, ?)';
     values = [userId, shipping_id, firstBookTitle, totalQuantity, totalPrice];
