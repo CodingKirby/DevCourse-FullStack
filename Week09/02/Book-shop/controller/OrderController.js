@@ -12,24 +12,18 @@ const order = async (req, res) => {
     });
 
     const { userId, items, shipping, firstBookTitle, totalQuantity, totalPrice } = req.body;
-    let shipping_id;
-    let order_id;
     
     // 1. shipping 테이블에 주문 정보 저장
     let sql = 'INSERT INTO shipping (address, receiver, contact) VALUES (?, ?, ?)';
     let values = [shipping.address, shipping.receiver, shipping.contact];
-    let [ result ] = await conn.query(sql, values);
-    console.log(result);
+    let [ result ] = await conn.execute(sql, values);
+    let shipping_id = result.insertId;
 
     // 2. orders 테이블에 주문 정보 저장
     sql = 'INSERT INTO orders (user_id, shipping_id, main_book, total_quantity, total_price) VALUES (?, ?, ?, ?, ?)';
     values = [userId, shipping_id, firstBookTitle, totalQuantity, totalPrice];
-    conn.query(sql, values, (err, result) => {
-        if (err) {
-            console.log(err);
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(result).end();
-        }
-    });
+    [ result ] = await conn.execute(sql, values);
+    let order_id = result.insertId;
 
     // 3. ordered 테이블에 주문 상세 정보 저장
     sql = 'INSERT INTO ordered (order_id, book_id, quantity) VALUES ?';
@@ -38,14 +32,8 @@ const order = async (req, res) => {
     items.forEach((item) => {
         values.push([order_id, item.book_id, item.quantity]);
     });
-    conn.query(sql, [values], (err, result) => {
-        if (err) {
-            console.log(err);
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(result).end();
-        }
-
-        return res.status(StatusCodes.CREATED).json(result).end();
-    });
+    [ result ] = await conn.query(sql, [values]);
+    return res.status(StatusCodes.CREATED).json({ result });
 };
 
 // 주문 목록 조회
