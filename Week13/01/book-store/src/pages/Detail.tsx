@@ -1,11 +1,11 @@
-function Home() {
+function Detail() {
     return (
         <>
             <div>
-                Home body
+                Detail page
             </div>
         </>
     )
 }
 
-export default Home;
+export default Detail;
