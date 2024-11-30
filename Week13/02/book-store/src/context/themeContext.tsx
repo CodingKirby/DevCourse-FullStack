@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
-import { getTheme, ThemeName } from "../style/theme";
-import { GlobalStyle } from "../style/global";
+import { getTheme, ThemeName } from "../styles/theme";
+import { GlobalStyle } from "../styles/global";
 import { ThemeProvider } from "styled-components";
 
 const DEFAULT_THEME_NAME = 'light';
