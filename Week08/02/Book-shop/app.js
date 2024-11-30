@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './Week07/02/Book-shop/.env' });
+require('dotenv').config({ path: `${__dirname}/.env` });
 const express = require('express');
 const app = express();
 

@@ -1,6 +1,8 @@
-require('dotenv').config({ path: './Week07/02/Book-shop/.env' });
+require('dotenv').config({ path: `${__dirname}/.env` });
 const express = require('express');
 const app = express();
+
+console.log(process.env.PRIVATE_KEY); // test if the env file is loaded correctly
 
 app.listen(process.env.PORT);
 app.use(express.json());
