@@ -44,6 +44,7 @@ const login = (req, res) => {
         }
         
         const token = jwt.sign({
+            user_id: loginUser.id,
             email: loginUser.email
         }, process.env.PRIVATE_KEY, {
             expiresIn: '5m',
@@ -53,7 +54,7 @@ const login = (req, res) => {
         res.cookie('token', token, {
             httpOnly: true
         });
-        console.log(token);
+        // console.log('token: ', token);
 
         return res.status(StatusCodes.OK).json(result);
     });

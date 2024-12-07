@@ -1,6 +1,6 @@
 const express = require('express');
-const { getAllCategories } = require('../controller/CategoryController');
 const router = express.Router();
+const { getAllCategories } = require('../controllers/CategoryController');
 
 router.get('/', getAllCategories); // 전체 카테고리 목록 조회
 
