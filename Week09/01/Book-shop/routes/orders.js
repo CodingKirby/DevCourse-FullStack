@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { order, getOrders, getOrdersDetail } = require('../controller/OrderController');
+const { order, getOrders, getOrdersDetail } = require('../controllers/OrderController');
 
 // 주문하기
 router.post('/', order);

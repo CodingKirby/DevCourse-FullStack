@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const conn = require('../mariadb');
-const { join, login, resetPasswordRequest, resetPassword } = require('../controller/UserController');
+const { join, login, resetPasswordRequest, resetPassword } = require('../controllers/UserController');
 
 router.post('/join', join); // 회원가입
 router.post('/login', login); // 로그인

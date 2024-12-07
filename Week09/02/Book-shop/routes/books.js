@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllBooks, getBookDetail } = require('../controller/BookController');
+const { getAllBooks, getBookDetail } = require('../controllers/BookController');
 const router = express.Router();
 
 router.get('/', getAllBooks); // 전체 도서 목록 조회 
