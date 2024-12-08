@@ -1,6 +1,7 @@
 const conn = require('../mariadb');
 const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
+const ensureAuthorization = require('../auth'); // 인증 모듈
 
 // 장바구니 담기 = 추가
 const addCartItems = (req, res) => {
@@ -71,18 +72,5 @@ const removeCartItems = (req, res) => {
         return res.status(StatusCodes.NO_CONTENT).end();
     });
 };
-
-function ensureAuthorization(req, res) {
-    try {
-        const receivedJwt = req.headers['authorization'];
-        const decodedJwt = jwt.verify(receivedJwt, process.env.PRIVATE_KEY);
-        // console.log("receivedJwt: ", receivedJwt);
-        // console.log("decodedJwt: ", decodedJwt);
-        return decodedJwt;
-    } catch (error) {
-        console.error("JWT 검증 오류:", error.name, error.message);
-        return error;
-    }
-}
 
 module.exports = { addCartItems, getCartItems, removeCartItems };
