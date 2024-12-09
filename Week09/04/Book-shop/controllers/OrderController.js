@@ -1,5 +1,6 @@
 const mariadb = require('mysql2/promise');
 const { StatusCodes } = require('http-status-codes');
+const ensureAuthorization = require('../auth');
 
 // 주문하기
 const order = async (req, res) => {
@@ -11,7 +12,17 @@ const order = async (req, res) => {
         dateStrings: true
     });
 
-    const { userId, items, shipping, titleBookTitle, totalQuantity, totalPrice } = req.body;
+    const { items, shipping, titleBookTitle, totalQuantity, totalPrice } = req.body;
+    const authorization = ensureAuthorization(req, res);
+    if (authorization instanceof jwt.TokenExpiredError) {
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+            message: "로그인 세션이 만료되었습니다. 다시 로그인해주세요."
+        });
+    } else if (authorization instanceof jwt.JsonWebTokenError) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            message: "잘못된 토큰입니다."
+        });
+    }
     
     // 1. shipping 테이블에 주문 정보 저장
     let sql = `INSERT INTO shipping (address, receiver, contact) VALUES (?, ?, ?)`;
@@ -22,7 +33,7 @@ const order = async (req, res) => {
     // 2. orders 테이블에 주문 정보 저장
     sql = `INSERT INTO orders (user_id, shipping_id, main_book, total_quantity, total_price)
             VALUES (?, ?, ?, ?, ?)`;
-    values = [userId, shipping_id, titleBookTitle, totalQuantity, totalPrice];
+    values = [authorization.user_id, shipping_id, titleBookTitle, totalQuantity, totalPrice];
     [ result ] = await conn.execute(sql, values);
     let order_id = result.insertId;
 
