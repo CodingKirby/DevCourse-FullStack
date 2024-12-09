@@ -1,5 +1,7 @@
 const conn = require('../mariadb');
 const { StatusCodes } = require('http-status-codes');
+const jwt = require('jsonwebtoken');
+const ensureAuthorization = require('../auth');
 
 // 전체 도서 목록 조회 + 카테고리 필터 + 신간 필터
 const getAllBooks = (req, res) => {
@@ -46,21 +48,34 @@ const getAllBooks = (req, res) => {
     });
 };
 
+// 도서 상세 정보 조회
 const getBookDetail = (req, res) => {
-    // 도서 상세 정보 조회
     const bookId = req.params.id;
-    const userId = req.body.user_id;
-
-    const sql = `SELECT books.*,
-        (SELECT COUNT(*) FROM likes WHERE likes.book_id = books.id) AS likes,
-        (SELECT EXISTS (
-            SELECT * FROM likes WHERE user_id = ? AND book_id = books.id)) AS liked,
-        category.name AS category_name
-    FROM books
-    LEFT JOIN category ON books.category_id = category.id
-    WHERE books.id = ?;`;
-
-    const values = [ userId, bookId ];
+    let sql, values;
+    const authorization = ensureAuthorization(req, res);
+    if (
+        authorization instanceof jwt.TokenExpiredError ||
+        authorization instanceof jwt.JsonWebTokenError ||
+        authorization instanceof ReferenceError
+    ) { // 로그인 상태가 아니거나 토큰이 만료/잘못된 경우 => liked 빼고 보내기
+        sql = `SELECT books.*,
+            (SELECT COUNT(*) FROM likes WHERE likes.book_id = books.id) AS likes,
+            category.name AS category_name
+        FROM books
+        LEFT JOIN category ON books.category_id = category.id
+        WHERE books.id = ?;`;
+        values = [ bookId ];
+    } else { // 로그인 상태면 => liked 추가해서 보내기
+        sql = `SELECT books.*,
+            (SELECT COUNT(*) FROM likes WHERE likes.book_id = books.id) AS likes,
+            (SELECT EXISTS (
+                SELECT * FROM likes WHERE user_id = ? AND book_id = books.id)
+            ) AS liked, category.name AS category_name
+        FROM books
+        LEFT JOIN category ON books.category_id = category.id
+        WHERE books.id = ?;`;
+        values = [ authorization.userId, bookId ];
+    }
 
     conn.query(sql, values, (err, result) => {
         if (err) {
