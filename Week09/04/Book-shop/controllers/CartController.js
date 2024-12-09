@@ -5,7 +5,7 @@ const ensureAuthorization = require('../auth'); // 인증 모듈
 
 // 장바구니 담기 = 추가
 const addCartItems = (req, res) => {
-    const { book_id, quantity } = req.body;
+    const { bookId, quantity } = req.body;
     const authorization = ensureAuthorization(req, res);
     if (authorization instanceof jwt.TokenExpiredError) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -18,7 +18,7 @@ const addCartItems = (req, res) => {
     }
 
     const sql = `INSERT INTO cartItems (book_id, quantity, user_id) VALUES (?, ?, ?)`;
-    const values = [book_id, quantity, authorization.user_id];
+    const values = [bookId, quantity, authorization.userId];
 
     conn.query(sql, values, (err, result) => {
         if (err) {
@@ -48,7 +48,7 @@ const getCartItems = (req, res) => {
         FROM cartItems LEFT JOIN books 
         ON cartItems.book_id = books.id
         WHERE user_id = ?`;
-    let values = [authorization.user_id];
+    let values = [authorization.userId];
 
     if (selected) { // 주문서 작성 시 '선택한 장바구니 목록 조회'
         sql += ` AND cartItems.id IN (?)`;

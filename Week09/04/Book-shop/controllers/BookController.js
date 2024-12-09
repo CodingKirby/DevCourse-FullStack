@@ -3,7 +3,7 @@ const { StatusCodes } = require('http-status-codes');
 
 // 전체 도서 목록 조회 + 카테고리 필터 + 신간 필터
 const getAllBooks = (req, res) => {
-    const { category_id, news, limit, currentPage } = req.query;
+    const { categoryId, news, limit, currentPage } = req.query;
 
     // limit: page 당 도서 수   ex. 10
     // currentPage: 현재 페이지  ex. 1, 2, 3, ...
@@ -18,9 +18,9 @@ const getAllBooks = (req, res) => {
     let values = [];
 
     // 카테고리 필터 추가
-    if (category_id) {
+    if (categoryId) {
         conditions.push(`category_id = ?`);
-        values.push(category_id);
+        values.push(categoryId);
     }
 
     // 신간 필터 추가 (최근 한 달)
@@ -48,8 +48,8 @@ const getAllBooks = (req, res) => {
 
 const getBookDetail = (req, res) => {
     // 도서 상세 정보 조회
-    const book_id = req.params.id;
-    const { user_id } = req.body;
+    const bookId = req.params.id;
+    const userId = req.body.user_id;
 
     const sql = `SELECT books.*,
         (SELECT COUNT(*) FROM likes WHERE likes.book_id = books.id) AS likes,
@@ -60,7 +60,7 @@ const getBookDetail = (req, res) => {
     LEFT JOIN category ON books.category_id = category.id
     WHERE books.id = ?;`;
 
-    const values = [ user_id, book_id ];
+    const values = [ userId, bookId ];
 
     conn.query(sql, values, (err, result) => {
         if (err) {

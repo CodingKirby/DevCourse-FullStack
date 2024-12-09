@@ -44,10 +44,10 @@ const login = (req, res) => {
         }
         
         const token = jwt.sign({
-            user_id: loginUser.id,
+            userId: loginUser.id,
             email: loginUser.email
         }, process.env.PRIVATE_KEY, {
-            expiresIn: '5m',
+            expiresIn: '1h',
             issuer: 'kirby'
         });
 

@@ -1,5 +1,6 @@
 const mariadb = require('mysql2/promise');
 const { StatusCodes } = require('http-status-codes');
+const jwt = require('jsonwebtoken');
 const ensureAuthorization = require('../auth');
 
 // 주문하기
@@ -12,7 +13,7 @@ const order = async (req, res) => {
         dateStrings: true
     });
 
-    const { items, shipping, titleBookTitle, totalQuantity, totalPrice } = req.body;
+    const { cartItems, delivery, titleBook, totalQuantity, totalPrice } = req.body;
     const authorization = ensureAuthorization(req, res);
     if (authorization instanceof jwt.TokenExpiredError) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -24,42 +25,42 @@ const order = async (req, res) => {
         });
     }
     
-    // 1. shipping 테이블에 주문 정보 저장
-    let sql = `INSERT INTO shipping (address, receiver, contact) VALUES (?, ?, ?)`;
-    let values = [shipping.address, shipping.receiver, shipping.contact];
+    // 1. delivery 테이블에 주문 정보 저장
+    let sql = `INSERT INTO delivery (address, receiver, contact) VALUES (?, ?, ?)`;
+    let values = [delivery.address, delivery.receiver, delivery.contact];
     let [ result ] = await conn.execute(sql, values);
-    let shipping_id = result.insertId;
+    const deliveryId = result.insertId;
 
     // 2. orders 테이블에 주문 정보 저장
-    sql = `INSERT INTO orders (user_id, shipping_id, main_book, total_quantity, total_price)
+    sql = `INSERT INTO orders (user_id, delivery_id, title_book, total_quantity, total_price)
             VALUES (?, ?, ?, ?, ?)`;
-    values = [authorization.user_id, shipping_id, titleBookTitle, totalQuantity, totalPrice];
+    values = [authorization.userId, deliveryId, titleBook, totalQuantity, totalPrice];
     [ result ] = await conn.execute(sql, values);
-    let order_id = result.insertId;
+    let orderId = result.insertId;
 
     // cartItemId로 book_id와 quantity 가져오기
     sql = `SELECT book_id, quantity FROM cartItems WHERE id IN (?)`;
-    let [orderItems, fields] = await conn.query(sql, [items]);
+    let [orderItems, fields] = await conn.query(sql, [cartItems]);
     
     // 3. ordered 테이블에 주문 상세 정보 저장
     sql = `INSERT INTO ordered (order_id, book_id, quantity) VALUES ?`;
     values = [];
-    // items 배열 : 요소들을 하나씩 꺼내서(foreach문 돌려서) > values 배열에 넣기
+    // cartItems 배열 : 요소들을 하나씩 꺼내서(foreach문 돌려서) > values 배열에 넣기
     orderItems.forEach((item) => {
-        values.push([order_id, item.book_id, item.quantity]);
+        values.push([orderId, item.book_id, item.quantity]);
     });
     [ result ] = await conn.query(sql, [values]); // 여러 개의 데이터를 한 번에 넣을 때는 query 사용
 
     // 4. 주문한 상품 장바구니에서 삭제
-    result = await deleteCartItems(conn, items);
+    result = await deleteCartItems(conn, cartItems);
 
     return res.status(StatusCodes.CREATED).json({ result });
 };
 
 // 장바구니 아이템 삭제
-const deleteCartItems = async (conn, items) => {
+const deleteCartItems = async (conn, cartItems) => {
     let sql = `DELETE FROM cartItems WHERE id IN (?)`;
-    let result = await conn.query(sql, [items]);
+    let result = await conn.query(sql, [cartItems]);
     return result;
 }
 
@@ -73,7 +74,7 @@ const getOrders = async (req, res) => {
         dateStrings: true
     });
 
-    let sql = `SELECT * FROM orders LEFT JOIN shipping ON orders.shipping_id = shipping.id`;
+    let sql = `SELECT * FROM orders LEFT JOIN delivery ON orders.delivery_id = delivery.id`;
     let [ orders ] = await conn.query(sql);
     return res.status(StatusCodes.OK).json(orders);
 };
