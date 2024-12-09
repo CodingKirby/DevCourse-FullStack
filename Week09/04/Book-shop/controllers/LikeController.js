@@ -17,7 +17,7 @@ const addLikes = (req, res) => {
         });
     }
 
-    const sql = 'INSERT INTO likes (user_id, book_id) VALUES (?, ?)';
+    let sql = 'INSERT INTO likes (user_id, book_id) VALUES (?, ?)';
     let values = [authorization.userId, bookId];
 
     conn.query(sql, values, (err, result) => {
@@ -47,7 +47,7 @@ const removeLikes = (req, res) => {
         });
     }
     
-    const sql = 'DELETE FROM likes WHERE user_id = ? AND book_id = ?';
+    let sql = 'DELETE FROM likes WHERE user_id = ? AND book_id = ?';
     let values = [authorization.userId, bookId];
 
     conn.query(sql, values, (err, result) => {

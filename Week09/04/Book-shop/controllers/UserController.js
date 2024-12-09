@@ -9,8 +9,8 @@ const join = (req, res) => {
     const salt = crypto.randomBytes(10).toString('base64');
     const hashedPassword = crypto.pbkdf2Sync(password, salt, 100000, 10, 'sha512').toString('base64');
 
-    const sql = `INSERT INTO users (email, password, salt) VALUES (?, ?, ?)`;
-    const values = [email, hashedPassword, salt];
+    let sql = `INSERT INTO users (email, password, salt) VALUES (?, ?, ?)`;
+    let values = [email, hashedPassword, salt];
     
     conn.query(sql, values, (err, result) => {
         if (err) {
@@ -23,8 +23,8 @@ const join = (req, res) => {
 
 const login = (req, res) => {
     const { email, password } = req.body;
-    const sql = `SELECT * FROM users WHERE email = ?`;
-    const values = [ email ];
+    let sql = `SELECT * FROM users WHERE email = ?`;
+    let values = [ email ];
 
     conn.query(sql, values, (err, result) => {
         if (err) { // 로그인 실패: 사용자 입력값이 부적절한 경우
@@ -62,8 +62,8 @@ const login = (req, res) => {
 
 const resetPasswordRequest = (req, res) => {
     const { email } = req.body;
-    const sql = `SELECT * FROM users WHERE email = ?`;
-    const values = [ email ];
+    let sql = `SELECT * FROM users WHERE email = ?`;
+    let values = [ email ];
 
     conn.query(sql, values, (err, result) => {
         if (err) {
@@ -88,8 +88,8 @@ const resetPassword = (req, res) => {
     const salt = crypto.randomBytes(10).toString('base64');
     const hashedPassword = crypto.pbkdf2Sync(password, salt, 100000, 10, 'sha512').toString('base64');
     
-    const sql = `UPDATE users SET password = ?, salt = ? WHERE email = ?`;
-    const values = [ hashedPassword, salt, email ];
+    let sql = `UPDATE users SET password = ?, salt = ? WHERE email = ?`;
+    let values = [ hashedPassword, salt, email ];
 
     conn.query(sql, values, (err, result) => {
         if (err) {

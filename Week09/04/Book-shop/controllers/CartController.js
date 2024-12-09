@@ -17,8 +17,8 @@ const addCartItems = (req, res) => {
         });
     }
 
-    const sql = `INSERT INTO cartItems (book_id, quantity, user_id) VALUES (?, ?, ?)`;
-    const values = [bookId, quantity, authorization.userId];
+    let sql = `INSERT INTO cartItems (book_id, quantity, user_id) VALUES (?, ?, ?)`;
+    let values = [bookId, quantity, authorization.userId];
 
     conn.query(sql, values, (err, result) => {
         if (err) {
@@ -77,9 +77,9 @@ const removeCartItems = (req, res) => {
             message: "잘못된 토큰입니다."
         });
     }
-    
-    const sql = `DELETE FROM cartItems WHERE id = ?`;
-    const values = [cartItemId];
+
+    let sql = `DELETE FROM cartItems WHERE id = ?`;
+    let values = [cartItemId];
     conn.query(sql, values, (err, result) => {
         if (err) {
             return res.status(StatusCodes.BAD_REQUEST).json(result);
