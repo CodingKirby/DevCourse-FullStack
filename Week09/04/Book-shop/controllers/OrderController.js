@@ -12,8 +12,7 @@ const order = async (req, res) => {
         database: 'Bookshop',
         dateStrings: true
     });
-
-    const { cartItems, delivery, titleBook, totalQuantity, totalPrice } = req.body;
+    
     const authorization = ensureAuthorization(req, res);
     if (authorization instanceof jwt.TokenExpiredError) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -24,6 +23,8 @@ const order = async (req, res) => {
             message: "잘못된 토큰입니다."
         });
     }
+
+    const { cartItems, delivery, titleBook, totalQuantity, totalPrice } = req.body;
     
     // 1. delivery 테이블에 주문 정보 저장
     let sql = `INSERT INTO delivery (address, receiver, contact) VALUES (?, ?, ?)`;
@@ -74,6 +75,17 @@ const getOrders = async (req, res) => {
         dateStrings: true
     });
 
+    const authorization = ensureAuthorization(req, res);
+    if (authorization instanceof jwt.TokenExpiredError) {
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+            message: "로그인 세션이 만료되었습니다. 다시 로그인해주세요."
+        });
+    } else if (authorization instanceof jwt.JsonWebTokenError) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            message: "잘못된 토큰입니다."
+        });
+    }
+
     let sql = `SELECT * FROM orders LEFT JOIN delivery ON orders.delivery_id = delivery.id`;
     let [ orders ] = await conn.query(sql);
     return res.status(StatusCodes.OK).json(orders);
@@ -88,6 +100,17 @@ const getOrdersDetail = async (req, res) => {
         database: 'Bookshop',
         dateStrings: true
     });
+
+    const authorization = ensureAuthorization(req, res);
+    if (authorization instanceof jwt.TokenExpiredError) {
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+            message: "로그인 세션이 만료되었습니다. 다시 로그인해주세요."
+        });
+    } else if (authorization instanceof jwt.JsonWebTokenError) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            message: "잘못된 토큰입니다."
+        });
+    }
     
     const orderId = req.params.id;
     let sql = `SELECT * FROM ordered LEFT JOIN books
