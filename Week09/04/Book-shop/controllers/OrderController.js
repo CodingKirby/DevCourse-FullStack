@@ -88,10 +88,10 @@ const getOrdersDetail = async (req, res) => {
         dateStrings: true
     });
     
-    const { id } = req.params;
+    const orderId = req.params.id;
     let sql = `SELECT * FROM ordered LEFT JOIN books
                 ON ordered.book_id = books.id WHERE order_id = ?`;
-    let [ ordersDetail ] = await conn.query(sql, [id]);
+    let [ ordersDetail ] = await conn.query(sql, [orderId]);
     return res.status(StatusCodes.OK).json(ordersDetail);
 };
 
