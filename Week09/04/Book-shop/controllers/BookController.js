@@ -50,9 +50,10 @@ const getAllBooks = (req, res) => {
 
 // 도서 상세 정보 조회
 const getBookDetail = (req, res) => {
+    const authorization = ensureAuthorization(req, res);
     const bookId = req.params.id;
     let sql, values;
-    const authorization = ensureAuthorization(req, res);
+    
     if (
         authorization instanceof jwt.TokenExpiredError ||
         authorization instanceof jwt.JsonWebTokenError ||

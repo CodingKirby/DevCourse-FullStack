@@ -5,7 +5,6 @@ const ensureAuthorization = require('../auth'); // 인증 모듈
 
 // 좋아요 표시 = 추가
 const addLikes = (req, res) => {
-    const bookId = req.params.id;
     const authorization = ensureAuthorization(req, res);
     if (authorization instanceof jwt.TokenExpiredError) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -17,6 +16,7 @@ const addLikes = (req, res) => {
         });
     }
 
+    const bookId = req.params.id;
     let sql = 'INSERT INTO likes (user_id, book_id) VALUES (?, ?)';
     let values = [authorization.userId, bookId];
 
@@ -35,7 +35,6 @@ const addLikes = (req, res) => {
 
 // 좋아요 취소 = 삭제
 const removeLikes = (req, res) => {
-    const bookId = req.params.id;
     const authorization = ensureAuthorization(req, res);
     if (authorization instanceof jwt.TokenExpiredError) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -47,6 +46,7 @@ const removeLikes = (req, res) => {
         });
     }
     
+    const bookId = req.params.id;    
     let sql = 'DELETE FROM likes WHERE user_id = ? AND book_id = ?';
     let values = [authorization.userId, bookId];
 

@@ -5,7 +5,6 @@ const ensureAuthorization = require('../auth'); // 인증 모듈
 
 // 장바구니 담기 = 추가
 const addCartItems = (req, res) => {
-    const { bookId, quantity } = req.body;
     const authorization = ensureAuthorization(req, res);
     if (authorization instanceof jwt.TokenExpiredError) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -16,7 +15,8 @@ const addCartItems = (req, res) => {
             message: "잘못된 토큰입니다."
         });
     }
-
+    
+    const { bookId, quantity } = req.body;
     let sql = `INSERT INTO cartItems (book_id, quantity, user_id) VALUES (?, ?, ?)`;
     let values = [bookId, quantity, authorization.userId];
 
@@ -31,7 +31,6 @@ const addCartItems = (req, res) => {
 
 // 장바구니 아이템 목록 조회
 const getCartItems = (req, res) => {
-    const { selected } = req.body; // selected = [cartItemId, cartItemId, ...]
     const authorization = ensureAuthorization(req, res);
     if (authorization instanceof jwt.TokenExpiredError) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -43,6 +42,7 @@ const getCartItems = (req, res) => {
         });
     }
 
+    const { selected } = req.body; // selected = [cartItemId, cartItemId, ...]
     // 해당 회원의 전체 장바구니 목록 조회
     let sql = `SELECT cartItems.id, book_id, title, summary, quantity, price 
         FROM cartItems LEFT JOIN books 
@@ -66,7 +66,6 @@ const getCartItems = (req, res) => {
 
 // 장바구니 아이템 삭제
 const removeCartItems = (req, res) => {
-    const cartItemId = req.params.id;
     const authorization = ensureAuthorization(req, res);
     if (authorization instanceof jwt.TokenExpiredError) {
         return res.status(StatusCodes.UNAUTHORIZED).json({
@@ -78,6 +77,7 @@ const removeCartItems = (req, res) => {
         });
     }
 
+    const cartItemId = req.params.id;    
     let sql = `DELETE FROM cartItems WHERE id = ?`;
     let values = [cartItemId];
     conn.query(sql, values, (err, result) => {
