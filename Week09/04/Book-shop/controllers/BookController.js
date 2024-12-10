@@ -5,6 +5,7 @@ const ensureAuthorization = require('../auth');
 
 // 전체 도서 목록 조회 + 카테고리 필터 + 신간 필터
 const getAllBooks = (req, res) => {
+    let response = {};
     const { categoryId, news, limit, currentPage } = req.query;
 
     // limit: page 당 도서 수   ex. 10
@@ -13,7 +14,7 @@ const getAllBooks = (req, res) => {
     //                        (currentPage - 1) * limit
     
     let offset = (currentPage - 1) * limit;
-    let sql = `SELECT *,
+    let sql = `SELECT SQL_CALC_FOUND_ROWS *,
     (SELECT COUNT(*) FROM likes WHERE likes.book_id = books.id) AS likes
     FROM books`;
     let conditions = [];
@@ -44,7 +45,26 @@ const getAllBooks = (req, res) => {
             console.error(err);
             return res.status(StatusCodes.BAD_REQUEST).end();
         }
-        res.status(StatusCodes.OK).json(result);
+        if (result.length === 0) {
+            return res.status(StatusCodes.NOT_FOUND).end();
+        }
+        
+        response.books = result;
+    });
+
+    sql = `SELECT found_rows()`;
+    conn.query(sql, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(StatusCodes.BAD_REQUEST).end();
+        }
+        
+        let pagenation = {};
+        pagenation.currentPage = parseInt(currentPage);
+        pagenation.totalCount = result[0]["found_rows()"];
+        response.pagenation = pagenation;
+
+        return res.status(StatusCodes.OK).json(response);
     });
 };
 
