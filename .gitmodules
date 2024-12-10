@@ -1,1 +1,7 @@
 
+[submodule "Projects/MDN/content"]
+	path = Projects/MDN/content
+	url = https://github.com/CodingKirby/content.git
+[submodule "Projects/MDN/translated-content"]
+	path = Projects/MDN/translated-content
+	url = https://github.com/CodingKirby/translated-content.git
