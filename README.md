@@ -12,13 +12,9 @@
 | **test**           | 테스트 코드 추가 또는 수정              | `test: 회원가입 기능에 대한 유닛 테스트 추가` |
 | **chore**          | 설정 변경 및 기타 작업                  | `chore: npm 패키지 업데이트`             |
 | **perf**           | 성능 최적화                             | `perf: 렌더링 속도 개선`                 |
-| **study**          | 학습 및 이론 정리                       | `study: JWT 인증 원리 정리`              |
 | **practice**       | 실습 코드 작성                         | `practice: Express 기본 라우팅 실습`     |
 | **example**        | 예제 코드 추가                         | `example: Sequelize 모델 정의 예제 추가` |
 | **project**        | 프로젝트 관련 변경                     | `project: 쇼핑몰 프로젝트 초기 설정`     |
-| **review**         | 코드 리뷰 또는 리팩토링                 | `review: 함수 네이밍 가독성 개선`        |
-| **til**            | TIL(Today I Learned) 기록              | `til: React 상태 관리 학습`              |
-
 
 ## 수강 목록
 
